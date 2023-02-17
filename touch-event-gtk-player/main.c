@@ -325,7 +325,7 @@ main (int argc, char **argv)
 		d->argv = argv;
 		d->current_uri = 1;
 
-		d->pipeline = gst_parse_launch ("playbin video-sink=\"gtkwaylandsink drm-device-path=/dev/dri/card0\"", &error);
+		d->pipeline = gst_parse_launch ("playbin video-sink=\"fpsdisplaysink text-overlay=false video-sink=\\\"gtkwaylandsink name=gtkwsink drm-device=/dev/dri/card0\\\"\"", &error);
 		if (error)
 			goto out;
 
@@ -354,7 +354,7 @@ main (int argc, char **argv)
 				"queue ! videoconvert ! video/x-raw,format=RGBA ! "
 				"queue ! glupload ! queue ! glshader name=customshader ! queue ! gldownload ! "
 				"queue ! videoconvert ! "
-				"queue ! gtkwaylandsink name=gtkwsink drm-device-path=/dev/dri/card0", &error);
+				"queue ! fpsdisplaysink text-overlay=false video-sink=\"gtkwaylandsink name=gtkwsink drm-device=/dev/dri/card0\"", &error);
 			if (error)
 				goto out;
 
@@ -374,7 +374,7 @@ main (int argc, char **argv)
 			g_free (fragment_content);
 		} else {
 			d->pipeline = gst_parse_launch ("videotestsrc pattern=18 "
-					"background-color=0x000062FF ! gtkwaylandsink name=gtkwsink drm-device-path=/dev/dri/card0",
+					"background-color=0x000062FF ! fpsdisplaysink text-overlay=false video-sink=\"gtkwaylandsink name=gtkwsink drm-device=/dev/dri/card0\"",
 					&error);
 			if (error)
 				goto out;
